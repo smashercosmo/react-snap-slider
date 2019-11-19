@@ -11,7 +11,7 @@
   ],
   "scripts": {
     "start": "tsdx watch",
-    "build": "tsdx build",
+    "build": "tsdx build && cpy src/index.css dist",
     "test": "tsdx test --env=jsdom",
     "lint": "tsdx lint src",
     "commit": "git-cz",
@@ -40,6 +40,7 @@
     "@typescript-eslint/eslint-plugin": "2.7.0",
     "@typescript-eslint/parser": "2.7.0",
     "commitizen": "4.0.3",
+    "cpy-cli": "2.0.0",
     "cz-conventional-changelog": "^3.0.2",
     "eslint-config-airbnb": "18.0.1",
     "eslint-config-prettier": "6.6.0",
