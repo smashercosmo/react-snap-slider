@@ -13,7 +13,7 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test --env=jsdom",
-    "lint": "tsdx lint src test",
+    "lint": "tsdx lint src",
     "commit": "git-cz",
     "semantic-release": "semantic-release"
   },
