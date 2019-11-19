@@ -9,10 +9,9 @@ function App() {
   )
 
   const itemStyles = {
-    height: 200,
-    borderLeft: '1px solid green',
-    borderRight: '1px solid blue',
-    backgroundColor: 'pink',
+    height: 'auto',
+    width: '100%',
+    display: 'block',
   }
 
   return (
@@ -34,18 +33,61 @@ function App() {
             &lt;
           </div>
         )}>
-        <div style={itemStyles}>1</div>
-        <div style={itemStyles}>2</div>
-        <div style={itemStyles}>3</div>
-        <div style={itemStyles}>4</div>
-        <div style={itemStyles}>5</div>
-        <div style={itemStyles}>6</div>
-        <div style={itemStyles}>7</div>
-        <div style={itemStyles}>8</div>
-        <div style={itemStyles}>9</div>
-        <div style={itemStyles}>10</div>
-        <div style={itemStyles}>11</div>
-        <div style={itemStyles}>12</div>
+        <img
+          style={itemStyles}
+          src="https://via.placeholder.com/100x300"
+          alt=""
+        />
+        <img
+          style={itemStyles}
+          src="https://via.placeholder.com/100x300"
+          alt=""
+        />
+        <img
+          style={itemStyles}
+          src="https://via.placeholder.com/100x300"
+          alt=""
+        />
+        <img
+          style={itemStyles}
+          src="https://via.placeholder.com/100x300"
+          alt=""
+        />
+        <img
+          style={itemStyles}
+          src="https://via.placeholder.com/100x300"
+          alt=""
+        />
+        <img
+          style={itemStyles}
+          src="https://via.placeholder.com/100x300"
+          alt=""
+        />
+        <img
+          style={itemStyles}
+          src="https://via.placeholder.com/100x300"
+          alt=""
+        />
+        <img
+          style={itemStyles}
+          src="https://via.placeholder.com/100x300"
+          alt=""
+        />
+        <img
+          style={itemStyles}
+          src="https://via.placeholder.com/100x300"
+          alt=""
+        />
+        <img
+          style={itemStyles}
+          src="https://via.placeholder.com/100x300"
+          alt=""
+        />
+        <img
+          style={itemStyles}
+          src="https://via.placeholder.com/100x300"
+          alt=""
+        />
       </SnapSlider>
     </div>
   )

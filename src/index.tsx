@@ -68,6 +68,11 @@ function SnapSlider(props: SnapSliderProps) {
     Number.call,
     Number,
   ) as number[]
+  const itemsToPad = columns * pages - childrenCount
+  const itemsToPadArray = Array.apply(null, Array(itemsToPad)).map(
+    Number.call,
+    Number,
+  ) as number[]
 
   useEffect(
     function onPagesChange() {
@@ -128,15 +133,23 @@ function SnapSlider(props: SnapSliderProps) {
     <div className={classes.root}>
       <div className={classes.inner}>
         <div className={classes.scroller} ref={scrollerRef}>
-          {pagesArray.map(key => {
+          {pagesArray.map(pageIndex => {
             return (
-              <div key={key} className={classes.page}>
+              <div key={`page${pageIndex}`} className={classes.page}>
                 {React.Children.map(children, (child, index) => {
-                  return index >= key * columns &&
-                    index < key * columns + columns ? (
-                    <div className={classes.item}>{child}</div>
-                  ) : null
+                  if (
+                    index >= pageIndex * columns &&
+                    index < pageIndex * columns + columns
+                  ) {
+                    return <div className={classes.item}>{child}</div>
+                  }
+                  return null
                 })}
+                {itemsToPad > 0 &&
+                  pageIndex === pages - 1 &&
+                  itemsToPadArray.map(temToPadIndex => (
+                    <div key={`pad${temToPadIndex}`} className={classes.item} />
+                  ))}
               </div>
             )
           })}
