@@ -5,7 +5,7 @@ Tiny react slider, based on css scroll-snap-points
 ## Usage
 
 ```
-npm start # or yarn start
+npm install react-snap-slider --save-exact
 ```
 
 ```js
