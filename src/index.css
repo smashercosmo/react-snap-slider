@@ -1,0 +1,128 @@
+.ReactSnapSlider__root {
+  position: relative;
+}
+
+.ReactSnapSlider__inner {
+  position: relative;
+}
+
+.ReactSnapSlider__scroller {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.ReactSnapSlider__scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.ReactSnapSlider__page {
+  flex: none;
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+}
+
+.ReactSnapSlider__item {
+  flex: 1;
+}
+
+/* modern scroll snap points */
+@supports (scroll-snap-align: start) {
+  .ReactSnapSlider__scroller {
+    scroll-snap-type: x mandatory;
+  }
+
+  .ReactSnapSlider__page {
+    scroll-snap-align: center;
+  }
+}
+
+/* old scroll snap points spec */
+@supports not (scroll-snap-align: start) {
+  .ReactSnapSlider__scroller {
+    -webkit-scroll-snap-type: mandatory;
+    scroll-snap-type: mandatory;
+    -webkit-scroll-snap-destination: 0% center;
+    scroll-snap-destination: 0% center;
+    -webkit-scroll-snap-points-x: repeat(100%);
+    scroll-snap-points-x: repeat(100%);
+  }
+
+  .ReactSnapSlider__page {
+    scroll-snap-coordinate: 0 0;
+  }
+}
+
+.ReactSnapSlider__prev,
+.ReactSnapSlider__next {
+  position: absolute;
+  display: flex;
+  align-content: center;
+  top: 0;
+  bottom: 0;
+}
+
+.ReactSnapSlider__next {
+  right: 0;
+}
+
+.ReactSnapSlider__arrow-prev,
+.ReactSnapSlider__arrow-next {
+  width: 0;
+  height: 0;
+  font-size: 0;
+  display: block;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+}
+
+.ReactSnapSlider__arrow-next {
+  border-left: 20px solid currentColor;
+}
+
+.ReactSnapSlider__arrow-prev {
+  border-right: 20px solid currentColor;
+}
+
+.ReactSnapSlider__arrow--active {
+  color: hsl(0, 0%, 50%);
+}
+
+.ReactSnapSlider__button {
+  padding: 0;
+  border: none;
+  background: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.ReactSnapSlider__pagination {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.ReactSnapSlider__dot {
+  flex: none;
+  height: 24px;
+  width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ReactSnapSlider__dot::after {
+  content: '';
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+}
+
+.ReactSnapSlider__dot--active::after {
+  background-color: currentColor;
+}
