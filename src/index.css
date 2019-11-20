@@ -12,6 +12,7 @@
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  position: relative;
 }
 
 .ReactSnapSlider__scroller::-webkit-scrollbar {
@@ -23,6 +24,17 @@
   display: flex;
   width: 100%;
   overflow: hidden;
+}
+
+.ReactSnapSlider__scroller--resizing > .ReactSnapSlider__page {
+  position: absolute;
+  visibility: hidden;
+}
+
+.ReactSnapSlider__scroller--resizing > .ReactSnapSlider__page--current {
+  visibility: visible;
+  position: relative;
+  z-index: 1;
 }
 
 .ReactSnapSlider__item {
