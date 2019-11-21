@@ -25,7 +25,7 @@ const classes = {
 }
 
 type SnapSliderOverrideableClasses = {
-  [key in keyof typeof overrideableClasses]: string
+  [key in keyof typeof overrideableClasses]?: string
 }
 
 type SnapSliderProps = {
