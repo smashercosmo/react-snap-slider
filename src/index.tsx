@@ -99,7 +99,15 @@ function SnapSlider(props: SnapSliderProps) {
   )
 
   function scrollTo(pageToScroll: number) {
-    if (!scrollerRef.current || pageToScroll === scrolledPage) return
+    if (
+      !scrollerRef.current ||
+      pageToScroll === scrolledPage ||
+      pageToScroll < 0 ||
+      pageToScroll > pages - 1
+    ) {
+      return
+    }
+
     const scrollLeft = Math.floor(
       scrollerRef.current.scrollWidth * (pageToScroll / pages),
     )

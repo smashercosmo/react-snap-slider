@@ -81,9 +81,7 @@ function Controls(props: {
               aria-disabled={current === 0}
               aria-label="Show previous slide"
               onClick={() => {
-                if (current > 0) {
-                  scrollTo(current - 1)
-                }
+                scrollTo(current - 1)
               }}>
               <span
                 style={{
@@ -120,9 +118,7 @@ function Controls(props: {
               aria-disabled={current === total - 1}
               aria-label="Show next slide"
               onClick={() => {
-                if (current < total - 1) {
-                  scrollTo(current + 1)
-                }
+                scrollTo(current + 1)
               }}>
               <span
                 style={{

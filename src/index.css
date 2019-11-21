@@ -1,11 +1,3 @@
-.ReactSnapSlider__root {
-  position: relative;
-}
-
-.ReactSnapSlider__inner {
-  position: relative;
-}
-
 .ReactSnapSlider__scroller {
   display: flex;
   overflow-x: auto;
