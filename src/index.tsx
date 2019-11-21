@@ -86,13 +86,19 @@ function SnapSlider(props: SnapSliderProps) {
         const scrollLeft = scrollerNode.scrollLeft
         const scrollWidth = scrollerNode.scrollWidth
 
+        // Because of easing function in smooth scroll polyfill
+        // final scrollLeft value could be not precise.
+        const normalizedScrollLeft = Math.floor(scrollLeft)
+
         if (typeof isBeingScrolledTo.current === 'number') {
-          if (scrollLeft === isBeingScrolledTo.current) {
+          if (normalizedScrollLeft === isBeingScrolledTo.current) {
             isBeingScrolledTo.current = undefined
           }
           return
         }
-        setScrolledPage(Math.round((scrollLeft / scrollWidth) * pages))
+        setScrolledPage(
+          Math.round((normalizedScrollLeft / scrollWidth) * pages),
+        )
       }
 
       function reset() {
