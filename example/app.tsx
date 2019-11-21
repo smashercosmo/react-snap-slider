@@ -35,57 +35,57 @@ function App() {
         )}>
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300"
+          src="https://via.placeholder.com/100x300?text=One"
           alt=""
         />
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300"
+          src="https://via.placeholder.com/100x300?text=Two"
           alt=""
         />
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300"
+          src="https://via.placeholder.com/100x300?text=Three"
           alt=""
         />
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300"
+          src="https://via.placeholder.com/100x300?text=Four"
           alt=""
         />
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300"
+          src="https://via.placeholder.com/100x300?text=Five"
           alt=""
         />
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300"
+          src="https://via.placeholder.com/100x300?text=Six"
           alt=""
         />
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300"
+          src="https://via.placeholder.com/100x300?text=Seven"
           alt=""
         />
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300"
+          src="https://via.placeholder.com/100x300?text=Eight"
           alt=""
         />
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300"
+          src="https://via.placeholder.com/100x300?text=Nine"
           alt=""
         />
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300"
+          src="https://via.placeholder.com/100x300?text=Ten"
           alt=""
         />
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300"
+          src="https://via.placeholder.com/100x300?text=Eleven"
           alt=""
         />
       </SnapSlider>

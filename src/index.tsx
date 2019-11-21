@@ -58,7 +58,7 @@ function SnapSlider(props: SnapSliderProps) {
   const paginationClass =
     classesOverrides.pagination || overrideableClasses.pagination
 
-  const [scrolledItem, setScrolledItem] = useState(0)
+  const [scrolledPage, setScrolledPage] = useState(0)
   const isBeingScrolledTo = useRef<number | undefined>(undefined)
   const scrollerRef = useRef<HTMLDivElement | null>(null)
 
@@ -77,11 +77,14 @@ function SnapSlider(props: SnapSliderProps) {
   useEffect(
     function onPagesChange() {
       let scrollerNode: HTMLDivElement | undefined
+      let timeout: number | null = null
+      let previousOffsetWidth: number | undefined
+      let isBeingResized = false
 
       function onScroll() {
-        if (!scrollerRef.current) return
-        const scrollLeft = scrollerRef.current.scrollLeft
-        const scrollWidth = scrollerRef.current.scrollWidth
+        if (!scrollerNode || isBeingResized) return
+        const scrollLeft = scrollerNode.scrollLeft
+        const scrollWidth = scrollerNode.scrollWidth
 
         if (typeof isBeingScrolledTo.current === 'number') {
           if (scrollLeft === isBeingScrolledTo.current) {
@@ -89,8 +92,22 @@ function SnapSlider(props: SnapSliderProps) {
           }
           return
         }
+        setScrolledPage(Math.round((scrollLeft / scrollWidth) * pages))
+      }
 
-        setScrolledItem(Math.round((scrollLeft / scrollWidth) * pages))
+      function reset() {
+        isBeingResized = false
+      }
+
+      function onResize() {
+        if (!scrollerNode) return
+        const offsetWidth = scrollerNode.offsetWidth
+        isBeingResized = true
+        scrollerNode.scrollLeft +=
+          offsetWidth - (previousOffsetWidth || offsetWidth)
+        previousOffsetWidth = offsetWidth
+        if (timeout) window.clearTimeout(timeout)
+        timeout = window.setTimeout(reset, 500)
       }
 
       if (scrollerRef.current) {
@@ -98,7 +115,10 @@ function SnapSlider(props: SnapSliderProps) {
         scrollerNode.addEventListener('scroll', onScroll)
       }
 
+      window.addEventListener('resize', onResize)
+
       return function onTeardown() {
+        window.removeEventListener('resize', onResize)
         if (scrollerNode) {
           scrollerNode.removeEventListener('scroll', onScroll)
         }
@@ -107,25 +127,25 @@ function SnapSlider(props: SnapSliderProps) {
     [pages],
   )
 
-  function scrollToItem(itemToScroll: number) {
-    if (!scrollerRef.current || itemToScroll === scrolledItem) return
+  function scrollToPage(pageToScroll: number) {
+    if (!scrollerRef.current || pageToScroll === scrolledPage) return
     const scrollLeft = Math.floor(
-      scrollerRef.current.scrollWidth * (itemToScroll / pages),
+      scrollerRef.current.scrollWidth * (pageToScroll / pages),
     )
-    setScrolledItem(itemToScroll)
+    setScrolledPage(pageToScroll)
     isBeingScrolledTo.current = scrollLeft
     smoothScroll(scrollerRef.current, scrollLeft)
   }
 
   function prev() {
-    if (scrolledItem > 0) {
-      scrollToItem(scrolledItem - 1)
+    if (scrolledPage > 0) {
+      scrollToPage(scrolledPage - 1)
     }
   }
 
   function next() {
-    if (scrolledItem < pages - 1) {
-      scrollToItem(scrolledItem + 1)
+    if (scrolledPage < pages - 1) {
+      scrollToPage(scrolledPage + 1)
     }
   }
 
@@ -133,20 +153,20 @@ function SnapSlider(props: SnapSliderProps) {
     <div className={classes.root}>
       <div className={classes.inner}>
         <div className={classes.scroller} ref={scrollerRef}>
-          {pagesArray.map(pageIndex => {
+          {pagesArray.map(page => {
             return (
-              <div key={`page${pageIndex}`} className={classes.page}>
+              <div key={`page${page}`} className={classes.page}>
                 {React.Children.map(children, (child, index) => {
                   if (
-                    index >= pageIndex * columns &&
-                    index < pageIndex * columns + columns
+                    index >= page * columns &&
+                    index < page * columns + columns
                   ) {
                     return <div className={classes.item}>{child}</div>
                   }
                   return null
                 })}
                 {itemsToPad > 0 &&
-                  pageIndex === pages - 1 &&
+                  page === pages - 1 &&
                   itemsToPadArray.map(temToPadIndex => (
                     <div key={`pad${temToPadIndex}`} className={classes.item} />
                   ))}
@@ -160,15 +180,15 @@ function SnapSlider(props: SnapSliderProps) {
               <button
                 className={buttonClass}
                 type="button"
-                aria-disabled={scrolledItem === 0}
+                aria-disabled={scrolledPage === 0}
                 aria-label="Show previous slide"
                 onClick={prev}>
                 {previousButtonComponent ? (
-                  previousButtonComponent({ active: scrolledItem === 0 })
+                  previousButtonComponent({ active: scrolledPage === 0 })
                 ) : (
                   <span
                     className={`${classes.prevArrow}${
-                      scrolledItem === 0 ? ` ${classes.activeArrow}` : ''
+                      scrolledPage === 0 ? ` ${classes.activeArrow}` : ''
                     }`}
                   />
                 )}
@@ -178,15 +198,15 @@ function SnapSlider(props: SnapSliderProps) {
               <button
                 className={buttonClass}
                 type="button"
-                aria-disabled={scrolledItem === pages - 1}
+                aria-disabled={scrolledPage === pages - 1}
                 aria-label="Show next slide"
                 onClick={next}>
                 {nextButtonComponent ? (
-                  nextButtonComponent({ active: scrolledItem === pages - 1 })
+                  nextButtonComponent({ active: scrolledPage === pages - 1 })
                 ) : (
                   <span
                     className={`${classes.nextArrow}${
-                      scrolledItem === pages - 1
+                      scrolledPage === pages - 1
                         ? ` ${classes.activeArrow}`
                         : ''
                     }`}
@@ -205,18 +225,18 @@ function SnapSlider(props: SnapSliderProps) {
                 key={key}
                 className={buttonClass}
                 type="button"
-                aria-current={key === scrolledItem ? 'page' : undefined}
+                aria-current={key === scrolledPage ? 'page' : undefined}
                 aria-label={`Show slide ${key + 1}`}
-                onClick={() => scrollToItem(key)}>
+                onClick={() => scrollToPage(key)}>
                 {pageNumberButtonComponent ? (
                   pageNumberButtonComponent({
-                    active: key === scrolledItem,
+                    active: key === scrolledPage,
                     index: key,
                   })
                 ) : (
                   <span
                     className={`${classes.dot}${
-                      key === scrolledItem ? ` ${classes.activeDot}` : ''
+                      key === scrolledPage ? ` ${classes.activeDot}` : ''
                     }`}
                   />
                 )}
