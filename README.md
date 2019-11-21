@@ -22,23 +22,7 @@ function App() {
 
   return (
     <div>
-      <SnapSlider
-        columns={6}
-        pageNumberButtonComponent={({ index, active }) => (
-          <div style={{ fontSize: 24, color: active ? 'green' : 'black' }}>
-            {index + 1}
-          </div>
-        )}
-        nextButtonComponent={({ active }) => (
-          <div style={{ fontSize: 24, color: active ? 'green' : 'black' }}>
-            &gt;
-          </div>
-        )}
-        previousButtonComponent={({ active }) => (
-          <div style={{ fontSize: 24, color: active ? 'green' : 'black' }}>
-            &lt;
-          </div>
-        )}>
+      <SnapSlider columns={6}>
         <div style={itemStyles}>1</div>
         <div style={itemStyles}>2</div>
         <div style={itemStyles}>3</div>

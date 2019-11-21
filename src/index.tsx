@@ -4,59 +4,24 @@ import { smoothScroll } from './smooth-scroll'
 
 const classPrefix = 'ReactSnapSlider'
 
-const overrideableClasses = {
-  button: `${classPrefix}__button`,
-  prev: `${classPrefix}__prev`,
-  next: `${classPrefix}__next`,
-  pagination: `${classPrefix}__pagination`,
-}
-
 const classes = {
-  root: `${classPrefix}__root`,
-  inner: `${classPrefix}__inner`,
   scroller: `${classPrefix}__scroller`,
   page: `${classPrefix}__page`,
   item: `${classPrefix}__item`,
-  dot: `${classPrefix}__dot`,
-  nextArrow: `${classPrefix}__arrow-next`,
-  prevArrow: `${classPrefix}__arrow-prev`,
-  activeDot: `${classPrefix}__dot--active`,
-  activeArrow: `${classPrefix}__arrow--active`,
-}
-
-type SnapSliderOverrideableClasses = {
-  [key in keyof typeof overrideableClasses]?: string
 }
 
 type SnapSliderProps = {
   columns: number
-  pageNumberButtonComponent?: (args: {
-    active: boolean
-    index: number
-  }) => React.ReactElement | null
-  previousButtonComponent?: (args: {
-    active: boolean
-  }) => React.ReactElement | null
-  nextButtonComponent?: (args: { active: boolean }) => React.ReactElement | null
-  classes?: SnapSliderOverrideableClasses
   children: React.ReactNode
+  controls?: React.ComponentType<{
+    total: number
+    current: number
+    scrollTo: (page: number) => void
+  }>
 }
 
 function SnapSlider(props: SnapSliderProps) {
-  const {
-    pageNumberButtonComponent,
-    previousButtonComponent,
-    nextButtonComponent,
-    classes: classesOverrides = {} as SnapSliderOverrideableClasses,
-    columns,
-    children,
-  } = props
-
-  const buttonClass = classesOverrides.button || overrideableClasses.button
-  const prevClass = classesOverrides.prev || overrideableClasses.prev
-  const nextClass = classesOverrides.next || overrideableClasses.next
-  const paginationClass =
-    classesOverrides.pagination || overrideableClasses.pagination
+  const { controls: Controls, columns, children } = props
 
   const [scrolledPage, setScrolledPage] = useState(0)
   const isBeingScrolledTo = useRef<number | undefined>(undefined)
@@ -133,7 +98,7 @@ function SnapSlider(props: SnapSliderProps) {
     [pages],
   )
 
-  function scrollToPage(pageToScroll: number) {
+  function scrollTo(pageToScroll: number) {
     if (!scrollerRef.current || pageToScroll === scrolledPage) return
     const scrollLeft = Math.floor(
       scrollerRef.current.scrollWidth * (pageToScroll / pages),
@@ -143,115 +108,34 @@ function SnapSlider(props: SnapSliderProps) {
     smoothScroll(scrollerRef.current, scrollLeft)
   }
 
-  function prev() {
-    if (scrolledPage > 0) {
-      scrollToPage(scrolledPage - 1)
-    }
-  }
-
-  function next() {
-    if (scrolledPage < pages - 1) {
-      scrollToPage(scrolledPage + 1)
-    }
-  }
-
   return (
-    <div className={classes.root}>
-      <div className={classes.inner}>
-        <div className={classes.scroller} ref={scrollerRef}>
-          {pagesArray.map(page => {
-            return (
-              <div key={`page${page}`} className={classes.page}>
-                {React.Children.map(children, (child, index) => {
-                  if (
-                    index >= page * columns &&
-                    index < page * columns + columns
-                  ) {
-                    return <div className={classes.item}>{child}</div>
-                  }
-                  return null
-                })}
-                {itemsToPad > 0 &&
-                  page === pages - 1 &&
-                  itemsToPadArray.map(temToPadIndex => (
-                    <div key={`pad${temToPadIndex}`} className={classes.item} />
-                  ))}
-              </div>
-            )
-          })}
-        </div>
-        {pages > 1 && (
-          <>
-            <div className={prevClass}>
-              <button
-                className={buttonClass}
-                type="button"
-                aria-disabled={scrolledPage === 0}
-                aria-label="Show previous slide"
-                onClick={prev}>
-                {previousButtonComponent ? (
-                  previousButtonComponent({ active: scrolledPage === 0 })
-                ) : (
-                  <span
-                    className={`${classes.prevArrow}${
-                      scrolledPage === 0 ? ` ${classes.activeArrow}` : ''
-                    }`}
-                  />
-                )}
-              </button>
+    <>
+      <div className={classes.scroller} ref={scrollerRef}>
+        {pagesArray.map(page => {
+          return (
+            <div key={`page${page}`} className={classes.page}>
+              {React.Children.map(children, (child, index) => {
+                if (
+                  index >= page * columns &&
+                  index < page * columns + columns
+                ) {
+                  return <div className={classes.item}>{child}</div>
+                }
+                return null
+              })}
+              {itemsToPad > 0 &&
+                page === pages - 1 &&
+                itemsToPadArray.map(temToPadIndex => (
+                  <div key={`pad${temToPadIndex}`} className={classes.item} />
+                ))}
             </div>
-            <div className={nextClass}>
-              <button
-                className={buttonClass}
-                type="button"
-                aria-disabled={scrolledPage === pages - 1}
-                aria-label="Show next slide"
-                onClick={next}>
-                {nextButtonComponent ? (
-                  nextButtonComponent({ active: scrolledPage === pages - 1 })
-                ) : (
-                  <span
-                    className={`${classes.nextArrow}${
-                      scrolledPage === pages - 1
-                        ? ` ${classes.activeArrow}`
-                        : ''
-                    }`}
-                  />
-                )}
-              </button>
-            </div>
-          </>
-        )}
+          )
+        })}
       </div>
-      {pages > 1 && (
-        <nav className={paginationClass}>
-          {pagesArray.map(key => {
-            return (
-              <button
-                key={key}
-                className={buttonClass}
-                type="button"
-                aria-current={key === scrolledPage ? 'page' : undefined}
-                aria-label={`Show slide ${key + 1}`}
-                onClick={() => scrollToPage(key)}>
-                {pageNumberButtonComponent ? (
-                  pageNumberButtonComponent({
-                    active: key === scrolledPage,
-                    index: key,
-                  })
-                ) : (
-                  <span
-                    className={`${classes.dot}${
-                      key === scrolledPage ? ` ${classes.activeDot}` : ''
-                    }`}
-                  />
-                )}
-              </button>
-            )
-          })}
-        </nav>
+      {Controls && (
+        <Controls total={pages} current={scrolledPage} scrollTo={scrollTo} />
       )}
-    </div>
+    </>
   )
 }
 
