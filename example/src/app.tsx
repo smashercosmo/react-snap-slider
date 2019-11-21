@@ -1,7 +1,7 @@
 import React from 'react'
 import useResponsiveValue from 'use-responsivevalue'
 
-import { SnapSlider } from '../src'
+import { SnapSlider } from '../../src'
 
 function App() {
   const columns = useResponsiveValue(

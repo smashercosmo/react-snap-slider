@@ -15,7 +15,9 @@
     "test": "tsdx test --env=jsdom",
     "lint": "tsdx lint src",
     "commit": "git-cz",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "build:example": "NODE_ENV=production webpack --progress --config ./example/webpack/webpack.production.config.js",
+    "start:example": "NODE_ENV=development webpack --progress --config ./example/webpack/webpack.development.config.js"
   },
   "peerDependencies": {
     "react": ">=16"
@@ -33,14 +35,25 @@
     "jsxBracketSameLine": true
   },
   "devDependencies": {
+    "@babel/cli": "7.7.0",
+    "@babel/core": "7.7.2",
+    "@babel/preset-modules": "0.1.0",
+    "@babel/preset-react": "7.7.0",
+    "@babel/preset-typescript": "7.7.2",
     "@types/jest": "24.0.23",
     "@types/jsdom": "12.2.4",
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.4",
+    "@types/webpack-env": "1.14.1",
     "@typescript-eslint/eslint-plugin": "2.7.0",
     "@typescript-eslint/parser": "2.7.0",
+    "add-asset-html-webpack-plugin": "3.1.3",
+    "app-root-path": "3.0.0",
+    "babel-loader": "8.0.6",
+    "clean-webpack-plugin": "3.0.0",
     "commitizen": "4.0.3",
     "cpy-cli": "2.0.0",
+    "css-loader": "3.2.0",
     "cz-conventional-changelog": "^3.0.2",
     "eslint-config-airbnb": "18.0.1",
     "eslint-config-prettier": "6.6.0",
@@ -51,15 +64,22 @@
     "eslint-plugin-prettier": "3.1.1",
     "eslint-plugin-react": "7.16.0",
     "eslint-plugin-react-hooks": "2.3.0",
+    "html-webpack-plugin": "4.0.0-beta.11",
     "husky": "3.0.9",
+    "mini-css-extract-plugin": "0.8.0",
     "react": "16.12.0",
     "react-dom": "16.12.0",
     "react-test-renderer": "16.12.0",
     "semantic-release": "15.13.31",
     "semantic-release-cli": "5.2.3",
+    "style-loader": "1.0.0",
     "tsdx": "0.11.0",
     "tslib": "1.10.0",
-    "typescript": "3.7.2"
+    "typescript": "3.7.2",
+    "use-responsivevalue": "1.0.0",
+    "webpack": "4.41.2",
+    "webpack-cli": "3.3.10",
+    "webpack-plugin-serve": "0.12.1"
   },
   "dependencies": {},
   "repository": {
