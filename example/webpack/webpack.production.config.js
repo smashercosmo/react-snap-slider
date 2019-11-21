@@ -8,7 +8,7 @@ module.exports = {
   ...base({ optimize: true }),
   plugins: [
     new HtmlWebpackPlugin({
-      template: 'index.html',
+      template: 'example/index.html',
     }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
