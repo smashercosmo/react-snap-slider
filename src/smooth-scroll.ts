@@ -67,4 +67,3 @@ export function smoothScroll(node: HTMLElement, left: number) {
     smoothScrollPolyfill(node, left)
   }
 }
-
