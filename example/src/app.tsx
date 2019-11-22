@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { CSSProperties } from 'react'
 import useResponsiveValue from 'use-responsivevalue'
 
 import { Controls } from './controls'
@@ -9,10 +9,13 @@ function App() {
     '(min-width: 480px) 3, (min-width: 720px) 4, (min-width: 1024px) 6, 2',
   )
 
-  const itemStyles = {
+  const itemStyles: CSSProperties = {
     height: 'auto',
     width: '100%',
     display: 'block',
+    borderRight: '1px solid red',
+    borderLeft: '1px solid red',
+    boxSizing: 'border-box',
   }
 
   return (
@@ -20,57 +23,57 @@ function App() {
       <SnapSlider columns={Number(columns)} controls={Controls}>
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300?text=One"
+          src="https://via.placeholder.com/110x300?text=One"
           alt=""
         />
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300?text=Two"
+          src="https://via.placeholder.com/110x300?text=Two"
           alt=""
         />
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300?text=Three"
+          src="https://via.placeholder.com/110x300?text=Three"
           alt=""
         />
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300?text=Four"
+          src="https://via.placeholder.com/110x300?text=Four"
           alt=""
         />
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300?text=Five"
+          src="https://via.placeholder.com/110x300?text=Five"
           alt=""
         />
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300?text=Six"
+          src="https://via.placeholder.com/110x300?text=Six"
           alt=""
         />
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300?text=Seven"
+          src="https://via.placeholder.com/110x300?text=Seven"
           alt=""
         />
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300?text=Eight"
+          src="https://via.placeholder.com/110x300?text=Eight"
           alt=""
         />
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300?text=Nine"
+          src="https://via.placeholder.com/110x300?text=Nine"
           alt=""
         />
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300?text=Ten"
+          src="https://via.placeholder.com/110x300?text=Ten"
           alt=""
         />
         <img
           style={itemStyles}
-          src="https://via.placeholder.com/100x300?text=Eleven"
+          src="https://via.placeholder.com/110x300?text=Eleven"
           alt=""
         />
       </SnapSlider>

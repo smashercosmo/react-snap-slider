@@ -49,6 +49,13 @@ function SnapSlider(props: SnapSliderProps) {
       let isBeingResized = false
       let isBeingManuallyScrolled = false
 
+      function getCurrentPage() {
+        if (!scrollerNode) return undefined
+        const scrollLeft = scrollerNode.scrollLeft
+        const scrollWidth = scrollerNode.scrollWidth
+        return Math.round((scrollLeft / scrollWidth) * pages)
+      }
+
       function onResizeEnd() {
         isBeingResized = false
       }
@@ -62,12 +69,11 @@ function SnapSlider(props: SnapSliderProps) {
       }
 
       function onScroll() {
-        if (!scrollerNode || isBeingResized) return
-        const scrollLeft = scrollerNode.scrollLeft
-        const scrollWidth = scrollerNode.scrollWidth
+        if (isBeingResized) return
 
         if (isBeingManuallyScrolled) {
-          setScrolledPage(Math.round((scrollLeft / scrollWidth) * pages))
+          const currentPage = getCurrentPage()
+          if (typeof currentPage === 'number') setScrolledPage(currentPage)
         }
 
         if (scrollTimeout) window.clearTimeout(scrollTimeout)
@@ -112,6 +118,9 @@ function SnapSlider(props: SnapSliderProps) {
           onTouchMove,
           supportsPassiveOption ? { passive: true } : false,
         )
+
+        const currentPage = getCurrentPage()
+        if (typeof currentPage === 'number') setScrolledPage(currentPage)
       }
 
       window.addEventListener(
