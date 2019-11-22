@@ -1,3 +1,5 @@
+import { supportsPassiveOption, supportsSmoothScroll } from './support-check'
+
 function easingOutQuint(x: number, t: number, b: number, c: number, d: number) {
   // eslint-disable-next-line no-param-reassign, no-return-assign
   return c * ((t = t / d - 1) * t * t * t * t + 1) + b
@@ -39,35 +41,24 @@ function smoothScrollPolyfill(node: HTMLElement, scrollPosition: number) {
     window.requestAnimationFrame(step)
   }
 
-  node.addEventListener('wheel', cancel, { passive: true })
-  node.addEventListener('touchstart', cancel, { passive: true })
+  node.addEventListener(
+    'wheel',
+    cancel,
+    supportsPassiveOption ? { passive: true } : false,
+  )
+  node.addEventListener(
+    'touchstart',
+    cancel,
+    supportsPassiveOption ? { passive: true } : false,
+  )
 
   step()
 
   return cancel
 }
 
-function testSupportsSmoothScroll() {
-  let supports = false
-  try {
-    const div = window.document.createElement('div')
-    // @ts-ignore
-    div.scrollTo({
-      top: 0,
-      get behavior() {
-        supports = true
-        return 'smooth'
-      },
-    })
-    // eslint-disable-next-line no-empty
-  } catch (err) {}
-  return supports
-}
-
-const hasNativeSmoothScroll = testSupportsSmoothScroll()
-
 export function smoothScroll(node: HTMLElement, left: number) {
-  if (hasNativeSmoothScroll) {
+  if (supportsSmoothScroll) {
     node.scrollTo({
       left,
       behavior: 'smooth',
@@ -76,3 +67,4 @@ export function smoothScroll(node: HTMLElement, left: number) {
     smoothScrollPolyfill(node, left)
   }
 }
+

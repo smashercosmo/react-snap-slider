@@ -47,10 +47,10 @@ function Controls(props: {
                     style={{
                       width: 16,
                       height: 16,
-                      border: '2px solid currentColor',
+                      border: '2px solid black',
                       borderRadius: '50%',
                       backgroundColor:
-                        page === current ? 'currentColor' : 'transparent',
+                        page === current ? 'black' : 'transparent',
                     }}
                   />
                 </span>

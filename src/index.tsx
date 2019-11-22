@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
 
+import { supportsPassiveOption } from './support-check'
 import { smoothScroll } from './smooth-scroll'
 
 const classPrefix = 'ReactSnapSlider'
@@ -24,7 +25,6 @@ function SnapSlider(props: SnapSliderProps) {
   const { controls: Controls, columns, children } = props
 
   const [scrolledPage, setScrolledPage] = useState(0)
-  const isBeingScrolledTo = useRef<number | undefined>(undefined)
   const scrollerRef = useRef<HTMLDivElement | null>(null)
 
   const childrenCount = React.Children.count(children)
@@ -42,32 +42,36 @@ function SnapSlider(props: SnapSliderProps) {
   useEffect(
     function onPagesChange() {
       let scrollerNode: HTMLDivElement | undefined
-      let timeout: number | null = null
       let previousOffsetWidth: number | undefined
+      let resizeTimeout: number | null = null
+      let scrollTimeout: number | null = null
+      let wheelTimeout: number | null = null
       let isBeingResized = false
+      let isBeingManuallyScrolled = false
+
+      function onResizeEnd() {
+        isBeingResized = false
+      }
+
+      function onScrollEnd() {
+        isBeingManuallyScrolled = false
+      }
+
+      function onWheelEnd() {
+        isBeingManuallyScrolled = false
+      }
 
       function onScroll() {
         if (!scrollerNode || isBeingResized) return
         const scrollLeft = scrollerNode.scrollLeft
         const scrollWidth = scrollerNode.scrollWidth
 
-        // Because of easing function in smooth scroll polyfill
-        // final scrollLeft value could be not precise.
-        const normalizedScrollLeft = Math.floor(scrollLeft)
-
-        if (typeof isBeingScrolledTo.current === 'number') {
-          if (normalizedScrollLeft === isBeingScrolledTo.current) {
-            isBeingScrolledTo.current = undefined
-          }
-          return
+        if (isBeingManuallyScrolled) {
+          setScrolledPage(Math.round((scrollLeft / scrollWidth) * pages))
         }
-        setScrolledPage(
-          Math.round((normalizedScrollLeft / scrollWidth) * pages),
-        )
-      }
 
-      function reset() {
-        isBeingResized = false
+        if (scrollTimeout) window.clearTimeout(scrollTimeout)
+        scrollTimeout = window.setTimeout(onScrollEnd, 100)
       }
 
       function onResize() {
@@ -77,21 +81,51 @@ function SnapSlider(props: SnapSliderProps) {
         scrollerNode.scrollLeft +=
           offsetWidth - (previousOffsetWidth || offsetWidth)
         previousOffsetWidth = offsetWidth
-        if (timeout) window.clearTimeout(timeout)
-        timeout = window.setTimeout(reset, 500)
+        if (resizeTimeout) window.clearTimeout(resizeTimeout)
+        resizeTimeout = window.setTimeout(onResizeEnd, 100)
+      }
+
+      function onWheel() {
+        isBeingManuallyScrolled = true
+        if (wheelTimeout) window.clearTimeout(wheelTimeout)
+        wheelTimeout = window.setTimeout(onWheelEnd, 100)
+      }
+
+      function onTouchMove() {
+        isBeingManuallyScrolled = true
       }
 
       if (scrollerRef.current) {
         scrollerNode = scrollerRef.current
-        scrollerNode.addEventListener('scroll', onScroll)
+        scrollerNode.addEventListener(
+          'scroll',
+          onScroll,
+          supportsPassiveOption ? { passive: true } : false,
+        )
+        scrollerNode.addEventListener(
+          'wheel',
+          onWheel,
+          supportsPassiveOption ? { passive: true } : false,
+        )
+        scrollerNode.addEventListener(
+          'touchmove',
+          onTouchMove,
+          supportsPassiveOption ? { passive: true } : false,
+        )
       }
 
-      window.addEventListener('resize', onResize)
+      window.addEventListener(
+        'resize',
+        onResize,
+        supportsPassiveOption ? { passive: true } : false,
+      )
 
       return function onTeardown() {
         window.removeEventListener('resize', onResize)
         if (scrollerNode) {
           scrollerNode.removeEventListener('scroll', onScroll)
+          scrollerNode.removeEventListener('touchmove', onTouchMove)
+          scrollerNode.removeEventListener('wheel', onWheel)
         }
       }
     },
@@ -112,7 +146,6 @@ function SnapSlider(props: SnapSliderProps) {
       scrollerRef.current.scrollWidth * (pageToScroll / pages),
     )
     setScrolledPage(pageToScroll)
-    isBeingScrolledTo.current = scrollLeft
     smoothScroll(scrollerRef.current, scrollLeft)
   }
 
