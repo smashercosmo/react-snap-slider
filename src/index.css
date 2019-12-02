@@ -17,8 +17,13 @@
   overflow: hidden;
 }
 
-.ReactSnapSlider__item {
+.ReactSnapSlider__item,
+.ReactSnapSlider__item--equal-size {
   flex: 1;
+}
+
+.ReactSnapSlider__item--equal-size {
+  min-width: 0;
 }
 
 /* modern scroll snap points */

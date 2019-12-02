@@ -9,10 +9,12 @@ const classes = {
   scroller: `${classPrefix}__scroller`,
   page: `${classPrefix}__page`,
   item: `${classPrefix}__item`,
+  itemEqualSize: `${classPrefix}__item--equal-size`,
 }
 
 type SnapSliderProps = {
   columns: number
+  forceEqualItemSize?: boolean
   children: React.ReactNode
   controls?: React.ComponentType<{
     total: number
@@ -22,7 +24,7 @@ type SnapSliderProps = {
 }
 
 function SnapSlider(props: SnapSliderProps) {
-  const { controls: Controls, columns, children } = props
+  const { controls: Controls, columns, children, forceEqualItemSize } = props
 
   const [scrolledPage, setScrolledPage] = useState(0)
   const scrollerRef = useRef<HTMLDivElement | null>(null)
@@ -169,14 +171,28 @@ function SnapSlider(props: SnapSliderProps) {
                   index >= page * columns &&
                   index < page * columns + columns
                 ) {
-                  return <div className={classes.item}>{child}</div>
+                  return (
+                    <div
+                      className={
+                        forceEqualItemSize
+                          ? classes.itemEqualSize
+                          : classes.item
+                      }>
+                      {child}
+                    </div>
+                  )
                 }
                 return null
               })}
               {itemsToPad > 0 &&
                 page === pages - 1 &&
                 itemsToPadArray.map(temToPadIndex => (
-                  <div key={`pad${temToPadIndex}`} className={classes.item} />
+                  <div
+                    key={`pad${temToPadIndex}`}
+                    className={
+                      forceEqualItemSize ? classes.itemEqualSize : classes.item
+                    }
+                  />
                 ))}
             </div>
           )
