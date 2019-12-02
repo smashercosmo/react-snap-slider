@@ -18,64 +18,30 @@ function App() {
     boxSizing: 'border-box',
   }
 
+  const items = [
+    'One',
+    'Two',
+    'Three',
+    'Four',
+    'Five',
+    'Six',
+    'Seven',
+    'Eight',
+    'Nine',
+    'Ten',
+    'Eleven',
+  ]
+
   return (
     <div style={{ position: 'relative' }}>
       <SnapSlider columns={Number(columns)} controls={Controls}>
-        <img
-          style={itemStyles}
-          src="https://via.placeholder.com/110x300?text=One"
-          alt=""
-        />
-        <img
-          style={itemStyles}
-          src="https://via.placeholder.com/110x300?text=Two"
-          alt=""
-        />
-        <img
-          style={itemStyles}
-          src="https://via.placeholder.com/110x300?text=Three"
-          alt=""
-        />
-        <img
-          style={itemStyles}
-          src="https://via.placeholder.com/110x300?text=Four"
-          alt=""
-        />
-        <img
-          style={itemStyles}
-          src="https://via.placeholder.com/110x300?text=Five"
-          alt=""
-        />
-        <img
-          style={itemStyles}
-          src="https://via.placeholder.com/110x300?text=Six"
-          alt=""
-        />
-        <img
-          style={itemStyles}
-          src="https://via.placeholder.com/110x300?text=Seven"
-          alt=""
-        />
-        <img
-          style={itemStyles}
-          src="https://via.placeholder.com/110x300?text=Eight"
-          alt=""
-        />
-        <img
-          style={itemStyles}
-          src="https://via.placeholder.com/110x300?text=Nine"
-          alt=""
-        />
-        <img
-          style={itemStyles}
-          src="https://via.placeholder.com/110x300?text=Ten"
-          alt=""
-        />
-        <img
-          style={itemStyles}
-          src="https://via.placeholder.com/110x300?text=Eleven"
-          alt=""
-        />
+        {items.map(item => (
+          <img
+            style={itemStyles}
+            src={`https://via.placeholder.com/110x300?text=${item}`}
+            alt=""
+          />
+        ))}
       </SnapSlider>
     </div>
   )
